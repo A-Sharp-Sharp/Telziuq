@@ -1,0 +1,171 @@
+<!-- Titanhacks 2020 -->
+<html>
+<head>
+    
+    <script src="https://kit.fontawesome.com/b6303a9138.js" crossorigin="anonymous"></script>
+    <style>
+        #title1 {
+            color: black;
+            font-family: Helvetica;
+            text-align: center;
+            padding: 15px;
+            border: black solid 6px;
+        }
+
+        .vocab {
+            font-size: 30px;
+        }
+        .box {
+            text-align: center;
+            background-color: grey;
+            padding: 25px;
+            box-shadow: grey 5px 5px 5px;
+            border: black solid 2px;
+            font-size: 35px;
+            display: inline-block;
+            width:75%;
+            
+        }
+
+        .textBox {
+            padding: 10px;
+            font-family: Helvetica;
+        }
+
+
+        .icon {
+            /* display: inline-block; */
+            font-size: 150px;
+        }
+
+        .savecheck {
+            font-size: 50px;
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #textbox2 {
+            font-family: Helvetica;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        #body {
+            background-image: url("https://cdn.pixabay.com/photo/2017/07/13/16/16/paper-2500942__340.jpg");
+            margin: 0;
+            text-align: center;
+        }
+
+        #cards {
+            width: 60%;
+            margin: auto;
+        }
+
+        .score {
+            font-size: 50px;
+        }
+    </style>
+</head>
+<body id="body">
+    <title>Telziuq</title>
+    <h1 id="title1">Telziuq</h1>
+    <div>
+    <h2>How to use this website:</h2>
+    <p>
+       Input the number of vocabulary words you need to study in the bar directly below.
+       Input each of your words into the text boxes labeled "Vocab".
+       Input the definition of each word into their respective boxes.
+       When all boxes are filled, click "Save".
+       Input the appropriate vocab words to match with the definitions you put down, and then click "Check" to show which ones you got correct.
+    </p>
+    </div>
+    <div id="textBox2">
+        <strong># of Vocab</strong>
+        <input type="text" id="vocabnum">
+        <button id="vocnumbutt" onclick='repeating()'>Confirm</button>
+    </div>
+
+    <div id='cards'>
+    </div>
+
+    <button class="savecheck" onclick='hideWord()'>Save</button>
+    <button class="savecheck" onclick="checkFunction()"> Check  </button>
+    
+     <div class="score">Score:</div>
+     <div class="score" id="score"></div>
+
+</body>
+</html>
+
+<script>
+    var right = document.getElementById('right');
+    var wrong = document.getElementById("wrong");
+    var word;
+    var count
+    
+    repeating();
+    function repeating(){
+       var countEl = document.getElementById('vocabnum');
+        count = countEl.value;
+        for (let i = 0; i < count; i++){  
+          createCard(i);
+        }
+    }
+    
+    function createCard(i) {
+        var card = document.createElement('div');
+        card.className = 'wrapper';
+        card.innerHTML = `
+        <div class="box">
+            <div class="textBox">
+                <strong>Vocab</strong>
+                <input id="word-${i}" class='vocab' type="text">
+            </div>
+            <div class="textBox">
+                <strong>Definition</strong>
+                <input type="text" class="vocab">
+            </div>
+        </div>
+        <i id='right-${i}' class="icon fas fa-check hidden"></i>
+        <i id="wrong-${i}" class="icon fas fa-times hidden"></i>
+        `;
+        
+        var cards = document.getElementById('cards');
+        cards.appendChild(card);
+    }
+
+    
+    var words = [];
+
+    function hideWord() {
+        for(let i = 0; i < count; i ++) {
+            var input = document.getElementById(`word-${i}`);
+            words.push(input.value);
+            input.value = '';
+        }
+        console.log('words', words);
+    }
+
+    function checkFunction(){
+        var score = 0;
+        for(let i = 0; i < count; i ++) {
+            let right = document.getElementById(`right-${i}`);
+            let wrong = document.getElementById(`wrong-${i}`);
+            let input = document.getElementById(`word-${i}`);
+            if(words[i] === input.value) {
+                right.classList.remove('hidden');
+                wrong.classList.add("hidden");
+                score++;
+            } else {
+                wrong.classList.remove("hidden");
+                right.classList.add("hidden");
+            }
+        }
+   
+        var results = document.getElementById("score");
+        results.textContent = score;
+    }
+</script>
